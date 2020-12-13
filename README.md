@@ -12,3 +12,9 @@ Die aktuellen Ratings der Konzerne sind:
 
 Die Daten sind erhältlich unter:
 https://docs.google.com/spreadsheets/d/1o6dUe5YJNMAJ981CziJ4IDfODWKYlPWdqrIVkNIi2tE/edit#gid=0
+
+
+Karten:
+![robobees](robobees.png?raw=true "Title")
+![dump_yard](dump_yard.png?raw=true "Title")
+
