@@ -15,6 +15,6 @@ https://docs.google.com/spreadsheets/d/1o6dUe5YJNMAJ981CziJ4IDfODWKYlPWdqrIVkNIi
 
 
 Karten:
-![robobees](robobees.png?raw=true "Title")
-![dump_yard](dump_yard.png?raw=true "Title")
+![robobees](cards/cards png/robobees.png?raw=true "Title")
+![dump_yard](cards/cards png/dump_yard.png?raw=true "Title")
 
