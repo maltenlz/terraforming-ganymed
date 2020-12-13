@@ -15,8 +15,8 @@ https://docs.google.com/spreadsheets/d/1o6dUe5YJNMAJ981CziJ4IDfODWKYlPWdqrIVkNIi
 
 
 Karten:
-![robobees](../master/cards/robobees.png?raw=true "Title")
+![robobees](../master/cards/robobees.png)
 
-![dump_yard](../master/cards/dump_yard.png?raw=true "Title")
+![dump_yard](../master/cards/dump_yard.png)
 
-![Insider_Trading](../master/cards/Insider_Trading.png?raw=true "Title")
+![Insider_Trading](../master/cards/Insider_Trading.png)
