@@ -75,7 +75,7 @@ summod = summary(betamod)
 betaframe = data.frame(Coeff = names(summod$coefficients$mean[,1]), Strength= summod$coefficients$mean[,1], sd = summod$coefficients$mean[,2])
 betaframe = rbind(betaframe, data.frame(Coeff = c("SpielerOskar", "KonzernArcadian"), Strength=c(0, 0), sd = c(0, 0)))
 
-ggplot(betaframe %>% filter(grepl("Spieler", Coeff)) %>% mutate(Spieler = gsub("Spieler", "", Coeff))%>% mutate(Spieler = fct_reorder(Spieler, Strength, .desc = TRUE)),
+p <- ggplot(betaframe %>% filter(grepl("Spieler", Coeff)) %>% mutate(Spieler = gsub("Spieler", "", Coeff))%>% mutate(Spieler = fct_reorder(Spieler, Strength, .desc = TRUE)),
                      aes(x = Spieler, y = Strength, fill = Strength)) + 
                      geom_bar(stat = "identity")  + 
                      theme_ipsum(axis_text_size = 12, axis_title_size = 14)+ 
@@ -85,7 +85,7 @@ ggplot(betaframe %>% filter(grepl("Spieler", Coeff)) %>% mutate(Spieler = gsub("
 
 
 
-ggplot(betaframe %>% filter(grepl("Konzern", Coeff)) %>% mutate(Konzern = gsub("Konzern", "", Coeff))%>% mutate(Konzern = fct_reorder(Konzern, Strength, .desc = TRUE)),
+k <- ggplot(betaframe %>% filter(grepl("Konzern", Coeff)) %>% mutate(Konzern = gsub("Konzern", "", Coeff))%>% mutate(Konzern = fct_reorder(Konzern, Strength, .desc = TRUE)),
                      aes(x = Konzern, y = Strength, fill = Strength)) + 
                      geom_bar(stat = "identity")  + 
                      theme_ipsum(axis_text_size = 12, axis_title_size = 14)+ 
@@ -93,6 +93,9 @@ ggplot(betaframe %>% filter(grepl("Konzern", Coeff)) %>% mutate(Konzern = gsub("
                      scale_fill_gradient(low = "pink", high = "darkred", na.value = NA)+ 
                      geom_errorbar(aes(ymin= Strength-sd, ymax= Strength+sd), width=.2, position=position_dodge(.9))
 
+png(filename="ratings_konzern.png")
+k
+dev.off()
 
 #### Komplexer mit Konzern und spieler als einfluß und dummy für gegner
 #### Idee für mit Gegnern: 
