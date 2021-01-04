@@ -2,6 +2,7 @@ library(ggplot2)
 library(dplyr)
 library(hrbrthemes)
 library(forcats)
+library(caret)
 raw <- read.csv("Terraforming Runde - Tabellenblatt1.csv")
 reshaped_data = list()
 for(i in 1:5){
@@ -61,11 +62,13 @@ data$Spieler = as.factor(as.character(data$Spieler))
 data$Konzern = as.factor(as.character(data$Konzern))
 
 ####
-x_design     = model.matrix(~. -1, data = data[,c("Spieler", "Konzern", "points_relative", "Spiel")])
+dmy          <- dummyVars(" ~ .", data = data[,c("Spieler", "Konzern", "points_relative", "Spiel")])
+x_design     <- data.frame(predict(dmy, newdata = data[,c("Spieler", "Konzern", "points_relative", "Spiel")]))
+#x_design     = model.matrix(~. -1, data = data[,c("Spieler", "Konzern", "points_relative", "Spiel")])
 x_design[,colnames(x_design) == "points_relative"] = x_design[,colnames(x_design) == "points_relative"]-0.01
 ### Patrick und Unmi als Referenzkategorien
 #w        =  1/sqrt(rev(x_design[,colnames(x_design) == "Spiel"]))
-x_design = x_design[,!(colnames(x_design) %in% c("Spieler", "Konzern", "SpielerOskar", "Spiel"))]
+x_design = x_design[,!(colnames(x_design) %in% c("Spieler", "Konzern", "Spieler.Oskar", "Konzern.Credicor", "Spiel"))]
 
 betamod = betareg(points_relative ~., data = data.frame(x_design), link = "logit")
 
@@ -73,14 +76,14 @@ summod = summary(betamod)
 
 
 betaframe = data.frame(Coeff = names(summod$coefficients$mean[,1]), Strength= summod$coefficients$mean[,1], sd = summod$coefficients$mean[,2])
-betaframe = rbind(betaframe, data.frame(Coeff = c("SpielerOskar", "KonzernArcadian"), Strength=c(0, 0), sd = c(0, 0)))
+betaframe = rbind(betaframe, data.frame(Coeff = c("SpielerOskar", "KonzernCredicor"), Strength=c(0, 0), sd = c(0, 0)))
 
 p <- ggplot(betaframe %>% filter(grepl("Spieler", Coeff)) %>% mutate(Spieler = gsub("Spieler", "", Coeff))%>% mutate(Spieler = fct_reorder(Spieler, Strength, .desc = TRUE)),
                      aes(x = Spieler, y = Strength, fill = Strength)) + 
                      geom_bar(stat = "identity")  + 
                      theme_ipsum(axis_text_size = 12, axis_title_size = 14)+ 
                      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
-                     scale_fill_gradient(low = "pink", high = "darkred", na.value = NA)+ 
+                     scale_fill_gradient(low = "lightgreen", high = "darkgreen", na.value = NA)+ 
                      geom_errorbar(aes(ymin= Strength-sd, ymax= Strength+sd), width=.2, position=position_dodge(.9))
 
 
@@ -90,7 +93,7 @@ k <- ggplot(betaframe %>% filter(grepl("Konzern", Coeff)) %>% mutate(Konzern = g
                      geom_bar(stat = "identity")  + 
                      theme_ipsum(axis_text_size = 12, axis_title_size = 14)+ 
                      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
-                     scale_fill_gradient(low = "pink", high = "darkred", na.value = NA)+ 
+                     scale_fill_gradient(low = "lightgreen", high = "darkgreen", na.value = NA)+ 
                      geom_errorbar(aes(ymin= Strength-sd, ymax= Strength+sd), width=.2, position=position_dodge(.9))
 
 png(filename="ratings_konzern.png")
