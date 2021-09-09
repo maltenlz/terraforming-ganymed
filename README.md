@@ -5,7 +5,7 @@ Die aktuellen Ratings der Konzerne sind:
 
 
 
-![Aktuelle Konzernratings:](ratings_konzern_cred.png?raw=true "Title")
+![Aktuelle Konzernratings:](ratings_konzern.png?raw=true "Title")
 
 
 Die Daten sind erhältlich unter:
