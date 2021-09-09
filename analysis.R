@@ -54,7 +54,7 @@ ggplot(data  %>% group_by(Spieler) %>% summarise(Punkte_rel = mean(points_relati
                  geom_errorbar(aes(ymin= Punkte_rel-sd, ymax= ifelse(Punkte_rel+sd>=1, 1, Punkte_rel+sd)), width=.2, position=position_dodge(.9))
 
 
-#### Beta Regression model auf Punkte_rel. Erstmal simpel: Konzern und Spieler als Einfluß
+#### Beta Regression model auf Punkte_rel. Erstmal simpel: Konzern und Spieler als Einflu?
 library(betareg)
 data = data %>% group_by(Spieler) %>% mutate(n_s = n()) %>% ungroup() %>% group_by(Konzern) %>% mutate(n_k = n()) %>% ungroup() %>% filter((n_s > 2) & (n_k > 1))
 
@@ -98,11 +98,24 @@ k <- ggplot(betaframe %>% filter(grepl("Konzern", Coeff)) %>% mutate(Konzern = g
 
 png(filename="ratings_konzern.png")
 k
+p
 dev.off()
+predict_outcome = function(Spieler, Konzern){
+  outframe = data.frame(Spieler = Spieler, Konzern = Konzern, expected_points_to_winner = NA)
+  for(i in 1:length(Spieler)){
+    dummy_frame    = data.frame(x_design[1,])
+    dummy_frame[,] = 0 
+    dummy_frame[,grepl(paste("Spieler", Spieler[i], sep = "."), colnames(dummy_frame))] = 1
+    dummy_frame[,grepl(paste("Konzern", gsub(" ", ".",Konzern[i]), sep = "."), colnames(dummy_frame))] = 1
+    outframe[i,3] = predict(betamod, dummy_frame)
+  }
+  outframe
+}
 
-#### Komplexer mit Konzern und spieler als einfluß und dummy für gegner
-#### Idee für mit Gegnern: 
-# Matrix, welche als Einträge enthält: 1 an der Stelle für den Spieler -1 an Stelle von den Gegnern
+predict_outcome(Spieler = c("Malte", "Julian", "Niklas"), Konzern = c("Saturn Systems", "Terralabs", "Tharsis Republic"))
+#### Komplexer mit Konzern und spieler als einflu? und dummy f?r gegner
+#### Idee f?r mit Gegnern: 
+# Matrix, welche als Eintr?ge enth?lt: 1 an der Stelle f?r den Spieler -1 an Stelle von den Gegnern
 # data  = do.call('rbind', reshaped_data)
 # data = data %>% filter(!is.na(Punkte)) %>% group_by(Spiel) %>% mutate(Victory = as.numeric(Punkte == max(Punkte, na.rm =T)),
 #                                                                       points_relative = Punkte/max(Punkte, na.rm =T),
